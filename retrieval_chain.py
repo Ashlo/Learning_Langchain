@@ -1,6 +1,6 @@
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import FAISS
-
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
 
@@ -17,4 +17,5 @@ documents = text_splitter.split_documents(docs)
 vector = FAISS.from_documents(documents, embeddings)
 
 print(vector)
+print("+++++++++++++++++++++++++++++++++++++++++")
 print(documents)
