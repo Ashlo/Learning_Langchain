@@ -8,8 +8,8 @@ from langchain.chains import RetrievalQA
 
 def main():
 
-	web_urls = ['www.caesefire.in']
-	pdf_paths = ['demo1.pdf', demo2.pdf]
+	web_urls = ['https://www.ceasefire.in/']
+	pdf_paths = ['/Users/ashutoshbele/Desktop/claude/fire_ratings.pdf','/Users/ashutoshbele/Desktop/claude/WHY.pdf']
 
 	data = []
 
@@ -23,7 +23,7 @@ def main():
 
 	# Split the load data
 
-	text_splitter = CharacterTextSplitter(seperator='\n',chunk_size=1000,chunk_overlap())
+	text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=40)
 	docs = text_splitter.split_documents(data)
 
 	# Create Ollama Embeddings
@@ -34,7 +34,7 @@ def main():
 	ABS_PATH = os.path.dirname(os.path.abspath(__file__))
 	DB_DIR = os.path.join(ABS_PATH, "db")
 
-	vectordb =Chroma.from_documents(document=docs, embedding=ollama_embeddings, persist_directory=DB_DIR)
+	vectordb =Chroma.from_documents(documents=docs, embedding=ollama_embeddings, persist_directory=DB_DIR)
 	vectordb.persist()
 
 
@@ -49,7 +49,13 @@ def main():
 	# create a Retriveal QA
 
 	qa = RetrievalQA.from_chain_type(llm=llm, chain_type='stuff', retriever=retriever)
-	prompt = "What is this company about"
+	while(True):
+		print("Enter prompt")
+		prompt = input()
+		if "exit" == prompt:
+			break
+		response = qa(prompt)
+		print(response)
 
 if __name__ == "__main__":
 	main()
